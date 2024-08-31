@@ -1,0 +1,24 @@
+{
+  "name": "openalgo",
+  "version": "1.0.0",
+  "description": "A Node.js wrapper for the OpenAlgo API",
+  "main": "openalgo.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marketcalls/openalgo-node.git"
+  },
+  "keywords": [
+    "openalgo",
+    "trading",
+    "API",
+    "nodejs"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
