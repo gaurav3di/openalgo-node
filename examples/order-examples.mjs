@@ -186,6 +186,39 @@ async function closeAllPositions() {
     }
 }
 
+// 10. Check order status
+async function checkOrderStatus() {
+    try {
+        // You would normally get this order ID from a previous order placement
+        const orderId = "123456789"; // Example order ID
+        
+        const status = await openalgo.orderStatus({
+            orderId: orderId,
+            strategy: "NodeJS"
+        });
+        console.log('Order Status Result:', JSON.stringify(status, null, 2));
+        return status;
+    } catch (error) {
+        console.error('Error checking order status:', error.message);
+    }
+}
+
+// 11. Check open position
+async function checkOpenPosition() {
+    try {
+        const position = await openalgo.openPosition({
+            strategy: "NodeJS",
+            symbol: "RELIANCE",
+            exchange: "NSE",
+            product: "MIS"
+        });
+        console.log('Open Position Result:', JSON.stringify(position, null, 2));
+        return position;
+    } catch (error) {
+        console.error('Error checking open position:', error.message);
+    }
+}
+
 // Helper function to delay execution
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -223,6 +256,13 @@ async function runSelectedExamples() {
         // Note: This will close all existing positions - use with caution
         // console.log('\n----- Closing All Positions -----');
         // await closeAllPositions();
+        
+        console.log('\n----- Checking Order Status -----');
+        await checkOrderStatus();
+        await delay(2000); // Wait to avoid rate limiting
+        
+        console.log('\n----- Checking Open Position -----');
+        await checkOpenPosition();
     } catch (error) {
         console.error(`Error in order examples: ${error.message}`);
     } finally {

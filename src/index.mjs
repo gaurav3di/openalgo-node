@@ -40,7 +40,7 @@ export const OrderAPI = OrderAPIClass;
 export const DataAPI = DataAPIClass;
 export const AccountAPI = AccountAPIClass;
 export const Strategy = StrategyClass;
-export const version = "1.1.0";
+export const version = "1.0.3";
 
 // Default export
 export default OpenAlgo;

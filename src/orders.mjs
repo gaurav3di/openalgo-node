@@ -350,6 +350,50 @@ class OrderAPI extends BaseAPI {
         
         return this._post(url, payload);
     }
+    
+    /**
+     * Get the status of a specific order.
+     * 
+     * @param {Object} params - Order status parameters
+     * @param {string} params.orderId - The order ID to check
+     * @param {string} [params.strategy="NodeJS"] - The trading strategy name
+     * @returns {Promise<Object>} JSON response with order status details
+     */
+    async orderStatus({ orderId, strategy = "NodeJS" }) {
+        const url = `${this.baseUrl}orderstatus`;
+        
+        const payload = {
+            apikey: this.apiKey,
+            orderid: orderId,  // Changed from order_id to orderid to match Python implementation
+            strategy
+        };
+        
+        return this._post(url, payload);
+    }
+    
+    /**
+     * Get current open position information.
+     * 
+     * @param {Object} params - Open position parameters
+     * @param {string} [params.strategy="NodeJS"] - The trading strategy name
+     * @param {string} params.symbol - Trading symbol
+     * @param {string} params.exchange - Exchange code
+     * @param {string} [params.product="MIS"] - Product type
+     * @returns {Promise<Object>} JSON response with position details
+     */
+    async openPosition({ strategy = "NodeJS", symbol, exchange, product = "MIS" }) {
+        const url = `${this.baseUrl}openposition`;
+        
+        const payload = {
+            apikey: this.apiKey,
+            strategy,
+            symbol,
+            exchange,
+            product
+        };
+        
+        return this._post(url, payload);
+    }
 }
 
 export default OrderAPI;
