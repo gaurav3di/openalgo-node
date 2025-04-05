@@ -7,7 +7,7 @@ import { Strategy } from '../src/index.mjs';
 
 // Create an instance with host URL and webhook ID
 const hostUrl = 'http://127.0.0.1:5000'; // Replace with your actual host URL
-const webhookId = 'd4775dd2-30aa-4adb-b6e5-406551755a58';     // Replace with your actual webhook ID
+const webhookId = 'YOUR_WEBHOOK_ID';     // Replace with your actual webhook ID
 const strategy = new Strategy(hostUrl, webhookId);
 
 // Examples of using the Strategy module

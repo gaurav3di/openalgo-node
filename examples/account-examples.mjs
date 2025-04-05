@@ -6,7 +6,7 @@
 import OpenAlgo from '../src/index.mjs';
 
 // Create an instance with your API key
-const apiKey = 'fc2862f7bbf782d2f5907730002dcf582fddc807280753646b3bfa239966c91b'; // Replace with your actual API key
+const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
 const openalgo = new OpenAlgo(apiKey);
 
 // Examples of using the Account API
