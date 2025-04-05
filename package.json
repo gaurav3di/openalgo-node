@@ -1,10 +1,15 @@
 {
   "name": "openalgo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Node.js wrapper for the OpenAlgo API",
-  "main": "openalgo.js",
+  "main": "src/index.mjs",
+  "type": "module",
   "scripts": {
-    "test": "node test.js"
+    "examples": "node examples/run-examples.mjs all",
+    "example:data": "node examples/run-examples.mjs data",
+    "example:order": "node examples/run-examples.mjs order",
+    "example:account": "node examples/run-examples.mjs account",
+    "example:strategy": "node examples/run-examples.mjs strategy"
   },
   "repository": {
     "type": "git",
@@ -14,11 +19,21 @@
     "openalgo",
     "trading",
     "API",
-    "nodejs"
+    "nodejs",
+    "algorithmic-trading",
+    "finance"
   ],
-  "author": "Your Name",
+  "author": "Rajandran R",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.21.1"
-  }
+    "axios": "^1.8.4"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "src/**/*",
+    "README.md",
+    "LICENSE"
+  ]
 }
