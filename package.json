@@ -1,7 +1,7 @@
 {
   "name": "openalgo",
-  "version": "1.0.3",
-  "description": "A Node.js wrapper for the OpenAlgo API",
+  "version": "1.0.4",
+  "description": "A Node.js wrapper for the OpenAlgo API with WebSocket support",
   "main": "src/index.mjs",
   "type": "module",
   "scripts": {
@@ -9,7 +9,9 @@
     "example:data": "node examples/run-examples.mjs data",
     "example:order": "node examples/run-examples.mjs order",
     "example:account": "node examples/run-examples.mjs account",
-    "example:strategy": "node examples/run-examples.mjs strategy"
+    "example:strategy": "node examples/run-examples.mjs strategy",
+    "example:analyzer": "node examples/run-examples.mjs analyzer",
+    "example:websocket": "node examples/run-examples.mjs websocket"
   },
   "repository": {
     "type": "git",
@@ -21,12 +23,15 @@
     "API",
     "nodejs",
     "algorithmic-trading",
-    "finance"
+    "finance",
+    "websocket",
+    "real-time-data"
   ],
   "author": "Rajandran R",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.8.4"
+    "axios": "^1.8.4",
+    "ws": "^8.18.0"
   },
   "engines": {
     "node": ">=14.0.0"

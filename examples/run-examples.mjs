@@ -1,8 +1,8 @@
 /**
  * OpenAlgo Node.js Library - Example Runner for ES Modules
- * 
+ *
  * This script runs examples for the OpenAlgo Node.js library.
- * Usage: node examples/run-examples.mjs [all|data|order|account|strategy]
+ * Usage: node examples/run-examples.mjs [all|data|order|account|strategy|analyzer|websocket]
  */
 
 import { fileURLToPath } from 'url';
@@ -11,6 +11,8 @@ import * as dataExamples from './data-examples.mjs';
 import * as orderExamples from './order-examples.mjs';
 import * as accountExamples from './account-examples.mjs';
 import * as strategyExamples from './strategy-examples.mjs';
+import * as analyzerExamples from './analyzer-examples.mjs';
+import * as websocketExamples from './websocket-examples.mjs';
 
 // Get the current directory
 const __filename = fileURLToPath(import.meta.url);
@@ -22,7 +24,7 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function runExamples(type) {
   try {
     console.log(`\n====== Running ${type.toUpperCase()} Examples ======\n`);
-    
+
     switch (type.toLowerCase()) {
       case 'data':
         await dataExamples.runSelectedExamples();
@@ -36,28 +38,42 @@ async function runExamples(type) {
       case 'strategy':
         await strategyExamples.runSelectedExamples();
         break;
+      case 'analyzer':
+        await analyzerExamples.runSelectedExamples();
+        break;
+      case 'websocket':
+        await websocketExamples.runSelectedExamples();
+        break;
       case 'all':
         console.log('==== Running All Example Categories ====\n');
-        
+
         console.log('1. Data API Examples:');
         await dataExamples.runSelectedExamples();
         await delay(2000); // Pause between categories
-        
+
         console.log('\n2. Order API Examples:');
         await orderExamples.runSelectedExamples();
         await delay(2000); // Pause between categories
-        
+
         console.log('\n3. Account API Examples:');
         await accountExamples.runSelectedExamples();
         await delay(2000); // Pause between categories
-        
+
         console.log('\n4. Strategy API Examples:');
         await strategyExamples.runSelectedExamples();
-        
+        await delay(2000); // Pause between categories
+
+        console.log('\n5. Analyzer API Examples:');
+        await analyzerExamples.runSelectedExamples();
+        await delay(2000); // Pause between categories
+
+        console.log('\n6. WebSocket Examples:');
+        await websocketExamples.runSelectedExamples();
+
         console.log('\n==== All Examples Completed ====');
         break;
       default:
-        console.log('Invalid example type. Use: all, data, order, account, or strategy');
+        console.log('Invalid example type. Use: all, data, order, account, strategy, analyzer, or websocket');
         break;
     }
   } catch (error) {

@@ -127,13 +127,66 @@ class DataAPI extends BaseAPI {
 
     /**
      * Get supported time intervals for historical data.
-     * 
+     *
      * @returns {Promise<Object>} JSON response containing available intervals
      */
     async intervals() {
         const url = `${this.baseUrl}intervals`;
         const payload = {
             apikey: this.apiKey
+        };
+        return this._post(url, payload);
+    }
+
+    /**
+     * Get expiry dates for a symbol.
+     *
+     * @param {Object} params - Request parameters
+     * @param {string} params.symbol - Trading symbol (e.g., "NIFTY", "BANKNIFTY")
+     * @param {string} params.exchange - Exchange code (e.g., "NFO")
+     * @param {string} params.instrumenttype - Instrument type ("options" or "futures")
+     * @returns {Promise<Object>} JSON response containing expiry dates
+     * @example
+     * const response = await client.expiry({
+     *     symbol: "NIFTY",
+     *     exchange: "NFO",
+     *     instrumenttype: "options"
+     * });
+     * console.log(response);
+     * // Output: { status: 'success', data: ['10-JUL-25', '17-JUL-25', ...], message: 'Found 18 expiry dates...' }
+     */
+    async expiry({ symbol, exchange, instrumenttype }) {
+        const url = `${this.baseUrl}expiry`;
+        const payload = {
+            apikey: this.apiKey,
+            symbol,
+            exchange,
+            instrumenttype
+        };
+        return this._post(url, payload);
+    }
+
+    /**
+     * Search for symbols matching a query.
+     *
+     * @param {Object} params - Request parameters
+     * @param {string} params.query - Search query (e.g., "NIFTY 25000 JUL CE")
+     * @param {string} params.exchange - Exchange code (e.g., "NFO", "NSE")
+     * @returns {Promise<Object>} JSON response containing matching symbols
+     * @example
+     * const response = await client.search({
+     *     query: "NIFTY 25000 JUL CE",
+     *     exchange: "NFO"
+     * });
+     * console.log(response);
+     * // Output: { status: 'success', data: [{symbol: 'NIFTY17JUL2525000CE', ...}], message: 'Found 6 matching symbols' }
+     */
+    async search({ query, exchange }) {
+        const url = `${this.baseUrl}search`;
+        const payload = {
+            apikey: this.apiKey,
+            query,
+            exchange
         };
         return this._post(url, payload);
     }

@@ -84,6 +84,33 @@ async function getIntervals() {
     }
 }
 
+// 6. Get expiry dates
+async function getExpiry() {
+    try {
+        const expiry = await openalgo.expiry({
+            symbol: 'NIFTY',
+            exchange: 'NFO',
+            instrumenttype: 'options'
+        });
+        console.log('Expiry Dates:', JSON.stringify(expiry, null, 2));
+    } catch (error) {
+        console.error('Error getting expiry dates:', error.message);
+    }
+}
+
+// 7. Search for symbols
+async function searchSymbol() {
+    try {
+        const search = await openalgo.search({
+            query: 'NIFTY 25000 OCT CE',
+            exchange: 'NFO'
+        });
+        console.log('Search Results:', JSON.stringify(search, null, 2));
+    } catch (error) {
+        console.error('Error searching symbols:', error.message);
+    }
+}
+
 // Helper function to delay execution
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -121,7 +148,21 @@ async function runAllExamples() {
     
     console.log('\n----- Getting Supported Intervals -----');
     await getIntervals();
-    
+
+    // Add a delay to avoid rate limiting
+    console.log('\nWaiting 2 seconds to avoid rate limiting...');
+    await delay(2000);
+
+    console.log('\n----- Getting Expiry Dates -----');
+    await getExpiry();
+
+    // Add a delay to avoid rate limiting
+    console.log('\nWaiting 2 seconds to avoid rate limiting...');
+    await delay(2000);
+
+    console.log('\n----- Searching Symbols -----');
+    await searchSymbol();
+
     console.log('\n====== Data API Examples Completed ======');
 }
 
