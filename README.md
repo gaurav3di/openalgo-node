@@ -15,9 +15,11 @@ npm install openalgo
 The OpenAlgo Node.js library is organized into modular components:
 
 - **BaseAPI**: Core functionality for API authentication and communication
-- **DataAPI**: Methods for accessing market data (quotes, depth, historical data)
+- **DataAPI**: Methods for accessing market data (quotes, depth, historical data, expiry, search)
 - **OrderAPI**: Comprehensive order management capabilities
 - **AccountAPI**: Account information and portfolio management
+- **AnalyzerAPI**: Analyzer mode for simulated trading
+- **WebSocket**: Real-time market data streaming (LTP, Quote, Market Depth)
 - **Strategy**: TradingView integration for strategy execution
 
 ## Usage Examples
@@ -459,6 +461,175 @@ async function getHoldings() {
 }
 ```
 
+### AnalyzerAPI
+
+Toggle between live and simulated trading modes.
+
+#### Getting Analyzer Status
+
+```javascript
+async function getAnalyzerStatus() {
+  try {
+    const status = await openalgo.analyzerstatus();
+    console.log('Analyzer Status:', status);
+    // Returns current mode (live/analyze) and statistics
+  } catch (error) {
+    console.error('Error fetching analyzer status:', error.message);
+  }
+}
+```
+
+#### Toggling Analyzer Mode
+
+```javascript
+async function toggleAnalyzerMode() {
+  try {
+    // Enable analyze mode (simulated trading)
+    const enableResult = await openalgo.analyzertoggle({ mode: true });
+    console.log('Analyzer Mode Enabled:', enableResult);
+
+    // Disable analyze mode (live trading)
+    const disableResult = await openalgo.analyzertoggle({ mode: false });
+    console.log('Analyzer Mode Disabled:', disableResult);
+  } catch (error) {
+    console.error('Error toggling analyzer mode:', error.message);
+  }
+}
+```
+
+### WebSocket API
+
+Real-time market data streaming for LTP, Quote, and Market Depth.
+
+#### Subscribing to LTP (Last Traded Price)
+
+```javascript
+import OpenAlgo from 'openalgo';
+
+const client = new OpenAlgo(
+    'YOUR_API_KEY',
+    'http://127.0.0.1:5000',
+    'v1',
+    'ws://127.0.0.1:8765'
+);
+
+const instruments = [
+    { exchange: "NSE", symbol: "RELIANCE" },
+    { exchange: "NSE", symbol: "INFY" }
+];
+
+function onLTP(data) {
+    console.log("LTP Update:", data);
+}
+
+async function streamLTP() {
+    try {
+        await client.connect();
+        client.subscribe_ltp(instruments, onLTP);
+
+        // Listen for updates...
+        await new Promise(resolve => setTimeout(resolve, 60000));
+
+        client.unsubscribe_ltp(instruments);
+        client.disconnect();
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+}
+```
+
+#### Subscribing to Quote Data
+
+```javascript
+const instruments = [
+    { exchange: "NSE", symbol: "SBIN" },
+    { exchange: "NSE", symbol: "TCS" }
+];
+
+function onQuote(data) {
+    console.log("Quote Update:", data);
+    // Receives: ltp, volume, open, high, low, close, etc.
+}
+
+async function streamQuote() {
+    try {
+        await client.connect();
+        client.subscribe_quote(instruments, onQuote);
+
+        await new Promise(resolve => setTimeout(resolve, 60000));
+
+        client.unsubscribe_quote(instruments);
+        client.disconnect();
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+}
+```
+
+#### Subscribing to Market Depth
+
+```javascript
+const instruments = [
+    { exchange: "NSE", symbol: "HDFCBANK" }
+];
+
+function onDepth(data) {
+    console.log("Market Depth Update:", data);
+    // Receives: 5-level order book with buy/sell orders
+}
+
+async function streamDepth() {
+    try {
+        await client.connect();
+        client.subscribe_depth(instruments, onDepth);
+
+        await new Promise(resolve => setTimeout(resolve, 60000));
+
+        client.unsubscribe_depth(instruments);
+        client.disconnect();
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+}
+```
+
+### Data API Enhancements
+
+#### Getting Expiry Dates
+
+```javascript
+async function getExpiryDates() {
+  try {
+    const expiry = await openalgo.expiry({
+      symbol: 'NIFTY',
+      exchange: 'NFO',
+      instrumenttype: 'options'  // or 'futures'
+    });
+    console.log('Expiry Dates:', expiry);
+    // Returns array of available expiry dates
+  } catch (error) {
+    console.error('Error fetching expiry dates:', error.message);
+  }
+}
+```
+
+#### Searching Symbols
+
+```javascript
+async function searchSymbols() {
+  try {
+    const searchResult = await openalgo.search({
+      query: 'NIFTY 25000 JUL CE',
+      exchange: 'NFO'
+    });
+    console.log('Search Results:', searchResult);
+    // Returns matching symbols with details
+  } catch (error) {
+    console.error('Error searching symbols:', error.message);
+  }
+}
+```
+
 ### Strategy Module for TradingView
 
 Integrates with TradingView for strategy execution via webhooks.
@@ -491,9 +662,11 @@ async function executeStrategyOrder() {
 
 The library includes comprehensive example files that demonstrate all functionality:
 
-- `data-examples.mjs`: Demonstrates all data API functionality
+- `data-examples.mjs`: Demonstrates all data API functionality (quotes, depth, history, expiry, search)
 - `order-examples.mjs`: Shows various order placement and management options
 - `account-examples.mjs`: Illustrates account information retrieval
+- `analyzer-examples.mjs`: Examples of analyzer mode toggling
+- `websocket-examples.mjs`: Real-time market data streaming examples
 - `strategy-examples.mjs`: Examples of TradingView strategy integration
 
 ### Running All Examples
@@ -508,6 +681,8 @@ npm run examples
 npm run example:data
 npm run example:order
 npm run example:account
+npm run example:analyzer
+npm run example:websocket
 npm run example:strategy
 ```
 
@@ -517,6 +692,8 @@ Or run the examples directly:
 node examples/run-examples.mjs data
 node examples/run-examples.mjs order
 node examples/run-examples.mjs account
+node examples/run-examples.mjs analyzer
+node examples/run-examples.mjs websocket
 node examples/run-examples.mjs strategy
 ```
 
