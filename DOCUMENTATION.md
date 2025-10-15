@@ -293,6 +293,143 @@ const response = await openalgo.holdings();
 console.log(response);
 ```
 
+## Analyzer Status Example
+
+To get analyzer status:
+
+```javascript
+const response = await openalgo.analyzerstatus();
+console.log(response);
+```
+
+## Analyzer Toggle Example
+
+To toggle analyzer mode (simulated/live trading):
+
+```javascript
+// Enable analyze mode (simulated trading)
+const response = await openalgo.analyzertoggle({ mode: true });
+console.log(response);
+
+// Disable analyze mode (live trading)
+const response = await openalgo.analyzertoggle({ mode: false });
+console.log(response);
+```
+
+## Expiry Example
+
+To get expiry dates for options/futures:
+
+```javascript
+const response = await openalgo.expiry({
+    symbol: "NIFTY",
+    exchange: "NFO",
+    instrumenttype: "options"  // or "futures"
+});
+console.log(response);
+```
+
+## Search Example
+
+To search for symbols:
+
+```javascript
+const response = await openalgo.search({
+    query: "NIFTY 25000 JUL CE",
+    exchange: "NFO"
+});
+console.log(response);
+```
+
+## WebSocket - LTP Streaming Example
+
+To stream real-time Last Traded Price:
+
+```javascript
+import OpenAlgo from 'openalgo';
+
+const client = new OpenAlgo(
+    'YOUR_API_KEY',
+    'http://127.0.0.1:5000',
+    'v1',
+    'ws://127.0.0.1:8765'
+);
+
+const instruments = [
+    { exchange: "NSE", symbol: "RELIANCE" },
+    { exchange: "NSE", symbol: "INFY" }
+];
+
+function onLTP(data) {
+    console.log("LTP Update:", data);
+}
+
+async function streamLTP() {
+    await client.connect();
+    client.subscribe_ltp(instruments, onLTP);
+
+    // Listen for 60 seconds
+    await new Promise(resolve => setTimeout(resolve, 60000));
+
+    client.unsubscribe_ltp(instruments);
+    client.disconnect();
+}
+
+streamLTP();
+```
+
+## WebSocket - Quote Streaming Example
+
+To stream real-time Quote data:
+
+```javascript
+const instruments = [
+    { exchange: "NSE", symbol: "SBIN" },
+    { exchange: "NSE", symbol: "TCS" }
+];
+
+function onQuote(data) {
+    console.log("Quote Update:", data);
+}
+
+async function streamQuote() {
+    await client.connect();
+    client.subscribe_quote(instruments, onQuote);
+
+    await new Promise(resolve => setTimeout(resolve, 60000));
+
+    client.unsubscribe_quote(instruments);
+    client.disconnect();
+}
+
+streamQuote();
+```
+
+## WebSocket - Market Depth Streaming Example
+
+To stream real-time Market Depth (order book):
+
+```javascript
+const instruments = [
+    { exchange: "NSE", symbol: "HDFCBANK" }
+];
+
+function onDepth(data) {
+    console.log("Market Depth Update:", data);
+}
+
+async function streamDepth() {
+    await client.connect();
+    client.subscribe_depth(instruments, onDepth);
+
+    await new Promise(resolve => setTimeout(resolve, 60000));
+
+    client.unsubscribe_depth(instruments);
+    client.disconnect();
+}
+
+streamDepth();
+```
+
 Please refer to the documentation and consult the API reference for details on optional parameters:
 - [API Documentation](https://docs.openalgo.in/api-documentation/v1)
-- [Order Constants](https://docs.openalgo.in/api-documentation/v1/order-constants)
